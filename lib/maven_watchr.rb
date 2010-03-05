@@ -1,6 +1,11 @@
 require 'watchr'
+require 'os'
 
-
+begin
+  require 'snarl' if OS.windows?
+rescue LoadError
+ puts 'snarl gem not available for popups'
+end
 
 class MavenWatchr
  attr_accessor :stop_after_next
@@ -16,21 +21,25 @@ class MavenWatchr
  def go_local_dir
    script = Watchr::Script.new
    script.watch('.*/(.*)\.java') do |changed_file|
-     if changed_file[1] =~ /^(.*)Test/
+     success = true
+     if changed_file[1] =~ /Test$/
        if @command_to_run
-         command = @command_to_run + $1
+         command = @command_to_run + changed_file[1]
          puts command
-         system(command)
+         success = system(command)
        end
          
      else
       if @command_to_run
-        command = @command_to_run + changed_file[1]
+        command = @command_to_run + changed_file[1] + 'Test'
         puts command
-        system(command)
+        success = system(command)
       end
      end
-     
+     if OS.windows? && !success
+       Snarl.new 'failed:' + command if defined?(Snarl)
+     end
+      
      raise 'done' if stop_after_next
    
    end

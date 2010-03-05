@@ -1,6 +1,6 @@
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "maven_watchr"
+    gem.name = "mvn_watch"
     gem.summary = %Q{A "continuous integration local tester" for maven projects (typically java), such that when you update a .java file, it will automatically run its unit test.}
     gem.description = gem.summary
     gem.email = "rogerdpack@gmail.com"
