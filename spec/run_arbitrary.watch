@@ -1,9 +1,0 @@
-require 'andand'
-raise unless command = ARGV[1]
-
-watch('src/test/.*/*.java') do |changed_file|
-  system("mvn test-compile")
-  if ARGV[2].andand.== "stop after first"
-    throw 'done here'
-  end
-end

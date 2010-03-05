@@ -3,7 +3,7 @@ require 'pathname'
 require 'spec/autorun'
 require 'sane'
 
-require_rel './maven_watchr'
+require_relative './maven_watchr'
 
 describe MavenWatchr do
 
@@ -11,6 +11,7 @@ describe MavenWatchr do
    Dir.chdir 'testArtifactId' if File.exist? 'testArtifactId'
    @subject = MavenWatchr.new
    @subject.stop_after_next = true
+   Thread.new { @subject.go_local_dir }  
   end
 
   it "should find java test file without .class and compile it "
@@ -18,9 +19,8 @@ describe MavenWatchr do
   it "should run unit test on one" do
     compiled = Pathname('target/test-classes/testGroupId/AppTest.class')
     compiled.delete if compiled.exist?
-    Thread.new { @subject.go }
     FileUtils.touch 'src/test/java/testGroupId/AppTest.java'
-    sleep 0.1 # should recompile its class
+    sleep 3.1 # should recompile its class
     assert compiled.exist?
        
   end
