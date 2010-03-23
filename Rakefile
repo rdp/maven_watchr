@@ -7,5 +7,6 @@
     gem.homepage = "http://github.com/rdp/maven_watchr"
     gem.authors = ["rdp"]
     gem.add_dependency "sane"
+    gem.add_dependency "watchr"
     gem.add_development_dependency "rspec", ">= 1.2.9"
   end
